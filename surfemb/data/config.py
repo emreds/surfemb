@@ -22,6 +22,7 @@ config['tless2'] = tless2 = DatasetConfig()
 tless2.model_folder = 'models_cad'
 tless2.test_folder = 'test'
 tless2.train_folder = 'train_pbr'
+tless2.img_ext = 'jpg'
 
 config['hb'] = hb = DatasetConfig()
 hb.test_folder = 'test_primesense'
