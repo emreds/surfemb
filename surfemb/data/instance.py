@@ -86,6 +86,8 @@ class BopInstanceDataset(torch.utils.data.Dataset):
         instance = self.instances[i].copy()
         for aux in self.auxs:
             instance = aux(instance, self)
+        instance['surface_samples'] = instance['surface_samples'].view(np.ndarray)
+        
         return instance
 
 
