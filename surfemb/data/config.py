@@ -18,6 +18,11 @@ tless.model_folder = 'models_cad'
 tless.test_folder = 'test_primesense'
 tless.train_folder = 'train_primesense'
 
+config['tless2'] = tless2 = DatasetConfig()
+tless2.model_folder = 'models_cad'
+tless2.test_folder = 'test'
+tless2.train_folder = 'train_pbr'
+
 config['hb'] = hb = DatasetConfig()
 hb.test_folder = 'test_primesense'
 

@@ -26,9 +26,9 @@ for mesh_fp in tqdm(list(mesh_folder.glob('*.ply'))):
 
     ms = pymeshlab.MeshSet()
     ms.load_new_mesh(str(mesh_fp.absolute()))
-    ms.repair_non_manifold_edges_by_removing_faces()
+    ms.meshing_repair_non_manifold_edges()
     ms.subdivision_surfaces_midpoint(iterations=10, threshold=pymeshlab.Percentage(args.remesh_percentage))
-    ms.ambient_occlusion(occmode='per-Face (deprecated)', reqviews=256)
+    ms.compute_scalar_ambient_occlusion(occmode='per-Face (deprecated)', reqviews=256)
     face_quality_array = ms.current_mesh().face_quality_array()
     minq = face_quality_array.min()
     if minq < args.face_quality_threshold:
