@@ -18,11 +18,17 @@ tless.model_folder = 'models_cad'
 tless.test_folder = 'test_primesense'
 tless.train_folder = 'train_primesense'
 
-config['tless2'] = tless2 = DatasetConfig()
-tless2.model_folder = 'models_cad'
-tless2.test_folder = 'test'
-tless2.train_folder = 'train_pbr'
-tless2.img_ext = 'jpg'
+config['tless3'] = tless3 = DatasetConfig()
+tless3.model_folder = 'models_cad'
+tless3.test_folder = 'test_primesense'
+tless3.train_folder = 'train_pbr'
+tless3.img_ext = 'jpg'
+
+config['tless3_non_textured'] = tless3_non_textured = DatasetConfig()
+tless3_non_textured.model_folder = 'models_cad'
+tless3_non_textured.test_folder = 'test_primesense'
+tless3_non_textured.train_folder = 'train_pbr'
+tless3_non_textured.img_ext = 'jpg'
 
 config['hb'] = hb = DatasetConfig()
 hb.test_folder = 'test_primesense'

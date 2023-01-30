@@ -41,6 +41,8 @@ res_crop = 224
 
 objs, obj_ids = obj.load_objs(root / cfg.model_folder)
 renderer = ObjCoordRenderer(objs, res_crop)
+print(f'This is len(obj_ids): {len(obj_ids)}')
+print(f'This is model.n_objs: {model.n_objs}')
 assert len(obj_ids) == model.n_objs
 surface_samples, surface_sample_normals = utils.load_surface_samples(dataset, obj_ids)
 auxs = model.get_infer_auxs(objs=objs, crop_res=res_crop, from_detections=detection)

@@ -44,6 +44,7 @@ def balanced_dataset_concat(a, b):
 
 def load_surface_samples(dataset, obj_ids, root=Path('data')):
     surface_samples = [trimesh.load_mesh(root / f'surface_samples/{dataset}/obj_{i:06d}.ply').vertices for i in obj_ids]
+    #print(f'These are the surface_samples: {surface_samples}')
     surface_sample_normals = [trimesh.load_mesh(root / f'surface_samples_normals/{dataset}/obj_{i:06d}.ply').vertices
                               for i in obj_ids]
     return surface_samples, surface_sample_normals

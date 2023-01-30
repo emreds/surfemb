@@ -35,7 +35,7 @@ for t in targets_raw:
     target_count += t['inst_count']
 print('target count', target_count)
 
-results = torch.load(f'../cosypose/local_data/results/bop-pbr--223026/dataset={args.dataset}/results.pth.tar')
+results = torch.load(f'/home/demiremre/surfemb/data/detection_results/tless3_non_textured/results.pth.tar')
 preds = results['predictions']
 detections = preds['maskrcnn_detections/detections']
 infos = preds['maskrcnn_detections/coarse/iteration=1'].infos
