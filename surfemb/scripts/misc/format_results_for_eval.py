@@ -7,17 +7,17 @@ import numpy as np
 from ...data.config import config
 
 parser = argparse.ArgumentParser()
-#parser.add_argument('dataset')
+parser.add_argument('dataset')
 parser.add_argument('poses')
 parser.add_argument('--dont-use-refinement', dest='use_refinement', action='store_false')
 parser.add_argument('--dont-use-pose-score', dest='use_pose_score', action='store_false')
 args = parser.parse_args()
 
-#detection_path = Path('data/detection_results') / args.dataset
-detection_path = Path('data/detection_results') / 'tless3_non_textured'
+detection_path = Path('data/detection_results') / args.dataset
+#detection_path = Path('data/detection_results') / 'tlesstextured01'
 poses_fp = Path(args.poses)
-dataset = 'tless3_non_textured'
-
+dataset = args.dataset
+print(f'This is detection path: {detection_path}')
 name = '-'.join(poses_fp.name.split('-')[:-1])  # dataset, run_id, [optionally "depth"]
 pose_scores_fp = poses_fp.parent / f'{name.replace("-depth", "")}-poses-scores.npy'
 pose_timings_fp = poses_fp.parent / f'{name}-poses-timings.npy'
@@ -30,6 +30,8 @@ det_view_ids = np.load(str(detection_path / 'view_ids.npy'))
 det_obj_ids = np.load(str(detection_path / 'obj_ids.npy'))
 det_scores = np.load(str(detection_path / 'scores.npy'))
 det_times = np.load(str(detection_path / 'times.npy'))
+print(f"These are len(det_scores): {len(det_scores)}")
+print(f"These are the len(pose_scores): {len(pose_scores)}")
 assert len(det_scores) == len(pose_scores)
 
 scores = pose_scores if args.use_pose_score else det_scores

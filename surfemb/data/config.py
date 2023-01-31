@@ -30,6 +30,36 @@ tless3_non_textured.test_folder = 'test_primesense'
 tless3_non_textured.train_folder = 'train_pbr'
 tless3_non_textured.img_ext = 'jpg'
 
+config['tlesstextured01'] = tlesstextured01 = DatasetConfig()
+tlesstextured01.model_folder = 'models_cad'
+tlesstextured01.test_folder = 'test_primesense'
+tlesstextured01.train_folder = 'train_pbr'
+tlesstextured01.img_ext = 'jpg'
+
+config['tlesstextured02'] = tlesstextured02 = DatasetConfig()
+tlesstextured02.model_folder = 'models_cad'
+tlesstextured02.test_folder = 'test_primesense'
+tlesstextured02.train_folder = 'train_pbr'
+tlesstextured02.img_ext = 'jpg'
+
+config['tlesstextured03'] = tlesstextured03 = DatasetConfig()
+tlesstextured03.model_folder = 'models_cad'
+tlesstextured03.test_folder = 'test_primesense'
+tlesstextured03.train_folder = 'train_pbr'
+tlesstextured03.img_ext = 'jpg'
+
+config['tlesstextured04'] = tlesstextured04 = DatasetConfig()
+tlesstextured04.model_folder = 'models_cad'
+tlesstextured04.test_folder = 'test_primesense'
+tlesstextured04.train_folder = 'train_pbr'
+tlesstextured04.img_ext = 'jpg'
+
+config['tlesstextured05'] = tlesstextured05 = DatasetConfig()
+tlesstextured05.model_folder = 'models_cad'
+tlesstextured05.test_folder = 'test_primesense'
+tlesstextured05.train_folder = 'train_pbr'
+tlesstextured05.img_ext = 'jpg'
+
 config['hb'] = hb = DatasetConfig()
 hb.test_folder = 'test_primesense'
 
