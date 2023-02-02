@@ -21,6 +21,7 @@ import matplotlib.pyplot as plt
 from ..utils import add_timing_to_list
 from ..data.config import config
 from ..data.obj import load_objs
+from ..data import instance
 from ..data.renderer import ObjCoordRenderer
 from ..data.detector_crops import DetectorCropDataset
 from ..surface_embedding import SurfaceEmbeddingModel
@@ -53,12 +54,19 @@ for fp in poses_depth_fp, poses_depth_timings_fp:
 model = SurfaceEmbeddingModel.load_from_checkpoint(args.model_path).to(device)
 model.eval()
 model.freeze()
-
+res_crop = 224
 objs, obj_ids = load_objs(root / cfg.model_folder)
+auxs = model.get_infer_auxs(objs=objs, crop_res=res_crop, from_detections=False)
+dataset_args = dict(dataset_root=root, obj_ids=obj_ids, auxs=auxs, cfg=cfg)
+dataset = instance.BopInstanceDataset(**dataset_args, pbr=not True, test=True)
+'''
 dataset = DetectorCropDataset(
     dataset_root=root, obj_ids=obj_ids, cfg=cfg, detection_folder=Path(f'data/detection_results/{dataset}'),
     auxs=model.get_infer_auxs(objs=objs, crop_res=crop_res)
 )
+'''
+print(f"poses.shape[1]: {poses.shape[1]}")
+print(f"len(dataset): {len(dataset)}")
 assert poses.shape[1] == len(dataset)
 
 crop_renderer = ObjCoordRenderer(objs=objs, w=crop_res, h=crop_res)

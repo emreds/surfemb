@@ -8,6 +8,7 @@ from tqdm import tqdm
 from .. import utils
 from ..data import detector_crops
 from ..data.config import config
+from ..data import instance
 from ..data.obj import load_objs
 from ..data.renderer import ObjCoordRenderer
 from ..surface_embedding import SurfaceEmbeddingModel
@@ -35,9 +36,14 @@ results_dir = Path('data/results')
 results_dir.mkdir(exist_ok=True)
 poses_fp = results_dir / f'{model_name}-poses.npy'
 poses_scores_fp = results_dir / f'{model_name}-poses-scores.npy'
+poses_coord_scores_fp = results_dir / f'{model_name}-poses-coord-scores.npy'
 poses_timings_fp = results_dir / f'{model_name}-poses-timings.npy'
+
+
+print(f'this is poses_fp {poses_fp}')
 for fp in poses_fp, poses_scores_fp, poses_timings_fp:
     assert not fp.exists()
+
 
 # load model
 model = SurfaceEmbeddingModel.load_from_checkpoint(str(model_path)).eval().to(device)  # type: SurfaceEmbeddingModel
@@ -48,18 +54,27 @@ root = Path('data/bop') / dataset
 cfg = config[dataset]
 objs, obj_ids = load_objs(root / cfg.model_folder)
 assert len(obj_ids) > 0
+auxs = model.get_infer_auxs(objs=objs, crop_res=res_crop, from_detections=False)
 surface_samples, surface_sample_normals = utils.load_surface_samples(dataset, obj_ids)
+dataset_args = dict(dataset_root=root, obj_ids=obj_ids, auxs=auxs, cfg=cfg)
+print(f"These are the dataset_args: {dataset_args}")
+'''
 data = detector_crops.DetectorCropDataset(
     dataset_root=root, cfg=cfg, obj_ids=obj_ids,
     detection_folder=Path(f'data/detection_results/{dataset}'),
     auxs=model.get_infer_auxs(objs=objs, crop_res=res_crop, from_detections=True)
 )
+'''
+
+data = instance.BopInstanceDataset(**dataset_args, pbr=not True, test=True)
 renderer = ObjCoordRenderer(objs, w=res_crop, h=res_crop)
+print(f"This is the length of data {len(data)}")
 
 # infer
 all_poses = np.empty((2, len(data), 3, 4))
 all_scores = np.ones(len(data)) * -np.inf
 time_forward, time_pnpransac, time_refine = [], [], []
+all_coord_scores = np.ones(len(data)) * -np.inf
 
 
 def infer(i, d):
@@ -79,15 +94,17 @@ def infer(i, d):
         verts = torch.from_numpy(verts).float().to(device)
 
     with utils.add_timing_to_list(time_pnpransac):
-        R_est, t_est, scores, *_ = estimate_pose(
+        R_est, t_est, scores, mask_scores, coord_scores, *_ = estimate_pose(
             mask_lgts=mask_lgts, query_img=query_img,
             obj_pts=verts, obj_normals=surface_sample_normals[obj_idx], obj_keys=obj_keys,
             obj_diameter=obj_.diameter, K=K_crop,
         )
+        print(f"CORRESPONDENCE SCORES {coord_scores.shape}")
         success = len(scores) > 0
         if success:
             best_idx = torch.argmax(scores).item()
             all_scores[i] = scores[best_idx].item()
+            all_coord_scores[i] = coord_scores[best_idx].item()
             R_est, t_est = R_est[best_idx].cpu().numpy(), t_est[best_idx].cpu().numpy()[:, None]
         else:
             R_est, t_est = np.eye(3), np.zeros((3, 1))
@@ -120,4 +137,5 @@ timings = np.stack((
 
 np.save(str(poses_fp), all_poses)
 np.save(str(poses_scores_fp), all_scores)
+np.save(str(poses_coord_scores_fp), all_coord_scores)
 np.save(str(poses_timings_fp), timings)

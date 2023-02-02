@@ -35,7 +35,7 @@ model.to(device)
 dataset = model_path.name.split('-')[0]
 real = args.real
 detection = args.detection
-root = Path('data/bop') / dataset
+root = Path('/home/demiremre/surfemb/data/bop') / dataset
 cfg = config[dataset]
 res_crop = 224
 
@@ -50,7 +50,8 @@ dataset_args = dict(dataset_root=root, obj_ids=obj_ids, auxs=auxs, cfg=cfg)
 if detection:
     assert args.real
     data = detector_crops.DetectorCropDataset(
-        **dataset_args, detection_folder=Path(f'detection_results/{dataset}')
+        #**dataset_args, detection_folder=Path(f'detection_results/{dataset}')
+        **dataset_args, detection_folder=Path(f'/home/demiremre/surfemb/data/detection_results/{dataset}')
     )
 else:
     data = instance.BopInstanceDataset(**dataset_args, pbr=not args.real, test=args.real)

@@ -11,6 +11,15 @@ from ..data import obj, instance
 from ..data.config import config
 from ..surface_embedding import SurfaceEmbeddingModel
 
+############################################################
+#import wandb
+#wandb.init(project="3dregistration", entity="wenzhao-tang")
+wandb.config = {
+#  "learning_rate": 0.001,
+  "epochs": 20,
+#  "batch_size": 128
+}
+############################################################
 
 def worker_init_fn(*_):
     # each worker should only use one os thread

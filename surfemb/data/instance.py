@@ -25,12 +25,14 @@ class BopInstanceDataset(torch.utils.data.Dataset):
         if pbr:
             assert not test
             self.data_folder = dataset_root / 'train_pbr'
+            #print(f'its in pbr this is data_folder : {self.data_folder}')
             self.img_folder = 'rgb'
             self.depth_folder = 'depth'
             self.img_ext = 'jpg'
             self.depth_ext = 'png'
         else:
             self.data_folder = dataset_root / (cfg.test_folder if test else cfg.train_folder)
+            print(f'its in test this is data_folder : {self.data_folder}')
             self.img_folder = cfg.img_folder
             self.depth_folder = cfg.depth_folder
             self.img_ext = cfg.img_ext
@@ -46,7 +48,7 @@ class BopInstanceDataset(torch.utils.data.Dataset):
             scene_gt = json.load((scene_folder / 'scene_gt.json').open())
             scene_gt_info = json.load((scene_folder / 'scene_gt_info.json').open())
             scene_camera = json.load((scene_folder / 'scene_camera.json').open())
-
+            #print(f"!!!scene_gt.items(): {len(scene_gt.items())}")
             for img_id, poses in scene_gt.items():
                 img_info = scene_gt_info[img_id]
                 K = np.array(scene_camera[img_id]['cam_K']).reshape((3, 3)).copy()
